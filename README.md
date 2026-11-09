@@ -1,17 +1,24 @@
-# QA Automation: saucedemo checkout 
+# QA Automation: UI и API автотесты
 
-Автотесты сквозного сценария оформления заказа сайта https://www.saucedemo.com/.
+UI-тесты проверяют оформление заказа в SauceDemo.
+API-тесты проверяют работу с постами и комментариями в JSONPlaceholder.
 
 ## Стек
-Java 17, Maven, JUnit 5, Selenide, Datafaker, Logback, Allure
+Java 17, Maven, JUnit 5, Selenide, Datafaker, Logback, Allure, REST Assured, JSON Schema
 
 ## Требования
-JDK 17, Maven 3.9+, Chrome
+JDK 17, Maven 3.9+, для UI-тестов нужен Chrome
 
 ## Запуск
+Из корня проекта запустить все тесты:
 ```
-cd qa-maven-project
 mvn clean test
+```
+
+Запустить только API-тесты:
+
+```
+mvn -Dtest=PostsApiTest test
 ```
 
 ## Отчёт Allure
@@ -22,8 +29,9 @@ mvn allure:serve
 Команда открывает отчёт в браузере и работает, пока вы не нажмёте `Ctrl+C`.
 
 ## Окружения
-Окружение выбирается флагом `-Denv`. Без флага используется `dev`.
+Окружение выбирается флагом `-Denv` только для UI-тестов. Без флага используется `dev`.
 У saucedemo один стенд, поэтому в config-dev и config-stage одинаковые значения. Механизм выбора файла проверен тестами
+Базовый URL для API-тестов задаётся в PostsApiTest
 ```
 mvn clean test -Denv=stage  
 mvn clean test -Denv=dev
@@ -34,6 +42,8 @@ mvn clean test -Denv=dev
 - config-stage.properties - данные для авторизации и получения ссылки на сайт на контуре stage
 - customers.csv - валидные данные для заполнения формы на сайте
 - products.csv - данные продуктов с сайта
+- create-post.json - тело запроса на создание поста
+- create-post-response.json — схема ответа
 
 ## Что покрыто
 Тесты:
@@ -46,13 +56,14 @@ mvn clean test -Denv=dev
 - Отображение заказа на странице оформления
 - Успешное оформление заказа
 - unit тесты: валидация моделей, чтение CSV, настройки и окружения, поиск данных, генератор данных
+- API: получение поста по ID, ответ 404 для отсутствующего поста, фильтрация комментариев, создание, обновление и удаление поста. Для ответа на создание проверяются значения полей и соответствие JSON Schema. JSONPlaceholder имитирует операции записи.
 
 
 ## Структура проекта
 - src/test/java/exceptions - кастомные исключения
 - src/test/java/models - модели данных
 - src/test/java/pages - описание методов страниц
-- src/test/java/tests - ui и unit тесты
+- src/test/java/tests - ui, api, unit тесты
 - src/test/java/utils  -  утилиты для проекта 
 - src/test/resources - файлы с данными 
 - src/main/java/learning - учебные файлы 1-2 этапа
