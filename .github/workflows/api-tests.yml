@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
 
       - name: Run unit tests
-        run: mvn -B '-Dtest=tests.unit.*Test.learning.*Test' test
+        run: mvn -B '-Dtest=tests.unit.*Test,learning.*Test' test
 
       - name: Upload unit test reports
         if: ${{ !cancelled() }}
