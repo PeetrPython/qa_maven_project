@@ -19,5 +19,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+
       - name: Run API tests
         run: mvn -B -Dtest=PostsApiTest test
+
+      - name: Upload API test reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: api-test-reports
+          path: target/surefire-reports/
