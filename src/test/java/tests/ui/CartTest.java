@@ -11,7 +11,7 @@ public class CartTest extends BaseUiTest {
     void addedProductShouldAppearInCart() {
         CartPage cartPage = loginPage
                 .loginAs(config.get("user.login"), config.get("user.password"))
-                .addToCart("Sauce Labs Backpack")
+                .addToCart("Sauce Labs BackpackTest")
                 .openCart();
 
         cartPage.shouldBeOpenedPath();
