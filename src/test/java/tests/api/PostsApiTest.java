@@ -113,4 +113,20 @@ public class PostsApiTest {
                 .body("userId", equalTo(1))
                 .body("title", equalTo("My first API test"));
     }
+
+    @Test
+    void returnsReplacementPostAfterPut() {
+        int postId = 1;
+
+        apiRequest()
+                .contentType("application/json")
+                .body(new File("src/test/resources/replace-post.json"))
+                .put("/posts/{id}", postId)
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(postId))
+                .body("title", equalTo("Replacement title"))
+                .body("body", equalTo("Replacement body"))
+                .body("userId", equalTo(2));
+    }
 }
