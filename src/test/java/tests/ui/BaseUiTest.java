@@ -10,9 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.LoginPage;
 
+import static com.codeborne.selenide.Selenide.clearBrowserCookies;
 import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
 import static com.codeborne.selenide.Selenide.refresh;
-import static org.openqa.selenium.devtools.v150.network.Network.clearBrowserCookies;
+
 
 
 @ExtendWith({ScreenShooterExtension.class})
