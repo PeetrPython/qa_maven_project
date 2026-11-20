@@ -98,7 +98,8 @@ public class PostsApiTest {
                 .when()
                 .delete("/posts/{id}", postId)
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .body("",aMapWithSize(0));
     }
 
     @Test
