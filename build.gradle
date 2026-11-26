@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+
+    id 'io.qameta.allure-report' version '3.0.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+configurations {
+    aspectjAgent
+}
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+
+    testImplementation 'com.codeborne:selenide:7.17.0'
+
+    testImplementation 'net.datafaker:datafaker:2.5.4'
+
+    testImplementation 'ch.qos.logback:logback-classic:1.5.37'
+
+    testImplementation 'io.qameta.allure:allure-jupiter:2.35.5'
+
+    testImplementation 'io.qameta.allure:allure-selenide:2.35.5'
+
+    testImplementation 'io.rest-assured:rest-assured:6.3.0'
+
+    testImplementation 'io.rest-assured:json-schema-validator:6.3.0'
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.0'
+
+    aspectjAgent 'org.aspectj:aspectjweaver:1.9.27'
+
+    allureReport files(layout.buildDirectory.dir('allure-results'))
+}
+
+test {
+    useJUnitPlatform()
+
+    systemProperty 'allure.results.directory',
+            layout.buildDirectory.dir('allure-results').get().asFile.absolutePath
+
+    doFirst {
+        jvmArgs "-javaagent:${configurations.aspectjAgent.singleFile.absolutePath}"
+    }
+
+    // Передать режим браузера в тестовую JVM
+    systemProperty 'selenide.headless',
+            System.getProperty('selenide.headless', 'false')
+
+    // Передать окружение; по умолчанию dev
+    systemProperty 'env', System.getProperty('env', 'dev')
+
+    // Использовать удалённый браузер, только если передан его адрес
+    def remoteUrl = System.getProperty('selenide.remote')
+    if (remoteUrl) {
+        systemProperty 'selenide.remote', remoteUrl
+    }
+}
+
+allure {
+    version = '2.34.1'
+}

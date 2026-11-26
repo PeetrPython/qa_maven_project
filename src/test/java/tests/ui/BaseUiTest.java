@@ -1,18 +1,18 @@
 package tests.ui;
 
-import com.codeborne.selenide.logevents.SelenideLogger;
-import io.qameta.allure.selenide.AllureSelenide;
-import utils.Config;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.LoginPage;
+import utils.Config;
 
-import static com.codeborne.selenide.Selenide.clearBrowserCookies;
-import static com.codeborne.selenide.Selenide.clearBrowserLocalStorage;
 import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.Selenide.localStorage;
+import static com.codeborne.selenide.Selenide.cookies;
 
 
 
@@ -40,8 +40,8 @@ public class BaseUiTest {
     void setUp() {
         loginPage = new LoginPage();
         loginPage.openPage(config.get("base.url"));
-        clearBrowserLocalStorage();
-        clearBrowserCookies();
+        localStorage().clear();
+        cookies().clear();
         refresh();
     }
 

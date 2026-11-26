@@ -3,9 +3,8 @@ package tests.unit;
 import exceptions.TestDataException;
 import models.Customer;
 import models.Product;
-import utils.CsvReader;
 import org.junit.jupiter.api.Test;
-
+import utils.CsvReader;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +41,15 @@ public class CsvReaderTest {
                 () -> CsvReader.read(missingFile, row -> row[0]));
         assertTrue(e.getMessage().contains(missingFile));
         assertInstanceOf(IOException.class, e.getCause());
+    }
+
+    @Test
+    void badNumberShouldThrowTestDataExceptionWithLineNumber() {
+        TestDataException e = assertThrows(TestDataException.class,
+                () -> CsvReader.read("src/test/resources/bad-number.csv", row -> Integer.parseInt(row[2])));
+        assertTrue(e.getMessage().contains("bad-number.csv"));
+        assertTrue(e.getMessage().contains("строка: 2"));
+        assertInstanceOf(NumberFormatException.class, e.getCause());
     }
 
 }
