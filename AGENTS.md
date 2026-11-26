@@ -4,7 +4,7 @@ UI-тесты проверяют оформление заказа в SauceDemo.
 API-тесты проверяют работу с постами и комментариями в JSONPlaceholder.
 
 ## Стек
-Java 17, Gradle Wrapper (Maven сохранён), JUnit 5, Selenide, Datafaker, Logback, Allure, REST Assured, JSON Schema
+Java 17, Gradle Wrapper, JUnit 5, Selenide, Datafaker, Logback, Allure, REST Assured, JSON Schema
 
 ## Требования
 JDK 17. Основной запуск — через Gradle Wrapper. Для локальных UI-тестов нужен Chrome. При использовании Selenium Grid браузер работает на удалённом узле, например в контейнере. Для API-тестов нужен доступ к JSONPlaceholder, для UI — к SauceDemo.
@@ -86,23 +86,6 @@ JDK 17. Основной запуск — через Gradle Wrapper. Для ло
 - Исходные результаты Allure: `build/allure-results/`.
 - HTML-отчёт Allure: `build/reports/allure-report/allureReport/`.
 - Скриншоты UI: `build/screenshots/`.
-
-## Maven как альтернативный вариант
-
-`pom.xml` сохранён. Для Maven требуется установленный Maven; его кеш удалять для работы Gradle не нужно.
-
-```bash
-# Запустить все тесты через Maven без окна браузера
-mvn clean -Dselenide.headless=true test
-
-# Запустить API-тесты через Maven
-mvn -Dtest=PostsApiTest test
-
-# Открыть отчёт по результатам Maven
-mvn allure:serve
-```
-
-Maven сохраняет тестовые результаты в `target/surefire-reports/`, результаты Allure — в `target/allure-results/`. Не смешивайте их с результатами Gradle.
 
 ## Правила обучения
 - Давай по одному небольшому заданию и жди моей попытки.

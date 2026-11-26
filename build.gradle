@@ -67,3 +67,8 @@ test {
 allure {
     version = '2.34.1'
 }
+
+// Сохранить UTF-8 для Java-исходников независимо от настроек системы
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
