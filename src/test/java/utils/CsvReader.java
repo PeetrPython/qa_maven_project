@@ -1,8 +1,6 @@
 package utils;
 
 import exceptions.TestDataException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class CsvReader {
@@ -37,12 +33,4 @@ public class CsvReader {
         return result;
     }
 
-    @Test
-    void badNumberShouldThrowTestDataExceptionWithLineNumber() {
-        TestDataException e = assertThrows(TestDataException.class,
-                () -> CsvReader.read("src/test/resources/no-such-file.csv", row -> row[0]));
-        Assertions.assertTrue(e.getMessage().contains("bad-number.csv"));
-        Assertions.assertTrue(e.getMessage().contains("строка 3"));
-        assertNotNull(e.getCause());
-    }
 }

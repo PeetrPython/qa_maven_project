@@ -24,14 +24,17 @@ jobs:
           java-version: '17'
 
       - name: Run unit tests
-        run: mvn -B '-Dtest=tests.unit.*Test,learning.*Test' test
+        run: ./gradlew test --tests 'tests.unit.*' --tests 'learning.*'
 
       - name: Upload unit test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: unit-test-reports
-          path: target/surefire-reports/
+          path: |
+            build/test-results/test/
+            build/reports/tests/test/
+            build/allure-results/
   api-tests:
     runs-on: ubuntu-latest
     steps:
@@ -42,14 +45,17 @@ jobs:
           java-version: '17'
 
       - name: Run API tests
-        run: mvn -B '-Dtest=tests.api.*Test' test
+        run: ./gradlew test --tests 'tests.api.*'
 
       - name: Upload API test reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
           name: api-test-reports
-          path: target/surefire-reports/
+          path: |
+            build/test-results/test/
+            build/reports/tests/test/
+            build/allure-results/
 
   ui-tests:
     runs-on: ubuntu-24.04
@@ -61,7 +67,7 @@ jobs:
           java-version: '17'
 
       - name: Run UI tests
-        run: mvn -B '-Dtest=tests.ui.*Test' -Dselenide.headless=true test
+        run: ./gradlew test --tests 'tests.ui.*' -Dselenide.headless=true
 
       - name: Upload UI test reports
         if: ${{ !cancelled() }}
@@ -69,6 +75,7 @@ jobs:
         with:
           name: ui-test-reports
           path: |
-              target/surefire-reports/
-              target/allure-results/
-              build/screenshots/**/*.png
+            build/test-results/test/
+            build/reports/tests/test/
+            build/allure-results/
+            build/screenshots/**/*.png

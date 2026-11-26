@@ -4,10 +4,10 @@ UI-тесты проверяют оформление заказа в SauceDemo.
 API-тесты проверяют работу с постами и комментариями в JSONPlaceholder.
 
 ## Стек
-Java 17, Maven, JUnit 5, Selenide, Datafaker, Logback, Allure, REST Assured, JSON Schema
+Java 17, Gradle Wrapper (Maven сохранён), JUnit 5, Selenide, Datafaker, Logback, Allure, REST Assured, JSON Schema
 
 ## Требования
-JDK 17, Maven. Для локального запуска UI-тестов нужен Chrome. При использовании Selenium Grid браузер может работать в контейнере.
+JDK 17. Основной запуск — через Gradle Wrapper. Для локальных UI-тестов нужен Chrome. При использовании Selenium Grid браузер работает на удалённом узле, например в контейнере. Для API-тестов нужен доступ к JSONPlaceholder, для UI — к SauceDemo.
 
 В папке src/test/resources хранятся файлы:
 - config-dev.properties - данные для авторизации и получения ссылки на сайт на контуре dev
@@ -40,37 +40,75 @@ JDK 17, Maven. Для локального запуска UI-тестов нуж
 - src/main/java/learning - учебные файлы 1-2 этапа
 - src/test/java/learning - учебные тесты 1-2 этапа
 
-## Команды
+## Команды Gradle
 
-Запустить все тесты из корня проекта:
+Все команды выполняются из корня проекта. Gradle Wrapper закрепляет версию 8.14.8; отдельная установка Gradle не требуется. При первом запуске нужны интернет и загрузка дистрибутива и зависимостей. На Windows используйте `gradlew.bat` вместо `./gradlew`.
 
 ```bash
-mvn clean test
+# Проверить версию Gradle и используемую Java
+./gradlew --version
+
+# Скомпилировать код и тесты без их выполнения
+./gradlew testClasses
+
+# Очистить build и запустить все тесты без окна браузера
+./gradlew clean test -Dselenide.headless=true
+
+# Запустить unit- и учебные тесты
+./gradlew test --tests 'tests.unit.*' --tests 'learning.*'
+
+# Запустить API-тесты
+./gradlew test --tests 'tests.api.*'
+
+# Запустить UI-тесты без окна браузера
+./gradlew test --tests 'tests.ui.*' -Dselenide.headless=true
+
+# Запустить один метод теста
+./gradlew test --tests 'tests.api.PostsApiTest.deletesPostById'
 ```
 
-Запустить все тесты без окна браузера:
+Для повторного выполнения актуальных задач добавьте `--rerun-tasks`. Статус `UP-TO-DATE` не означает новый запуск тестов.
+
+## Отчёты
 
 ```bash
+# Сгенерировать HTML-отчёт Allure по сохранённым результатам
+./gradlew allureReport
+
+# Открыть Allure через локальный сервер; остановка — Ctrl+C
+./gradlew allureServe
+```
+
+Эти команды Allure сами по себе не запускают тесты. Результаты нескольких запусков могут накапливаться; для отчёта одного свежего запуска сначала выполните `./gradlew clean test -Dselenide.headless=true`. `clean` удаляет весь `build/`, включая отчёты и скриншоты.
+
+- XML-результаты Gradle: `build/test-results/test/`.
+- HTML-отчёт Gradle: `build/reports/tests/test/index.html`.
+- Исходные результаты Allure: `build/allure-results/`.
+- HTML-отчёт Allure: `build/reports/allure-report/allureReport/`.
+- Скриншоты UI: `build/screenshots/`.
+
+## Maven как альтернативный вариант
+
+`pom.xml` сохранён. Для Maven требуется установленный Maven; его кеш удалять для работы Gradle не нужно.
+
+```bash
+# Запустить все тесты через Maven без окна браузера
 mvn clean -Dselenide.headless=true test
-```
 
-Запустить только API-тесты:
-
-```bash
+# Запустить API-тесты через Maven
 mvn -Dtest=PostsApiTest test
-```
 
-## Отчёт Allure
-После запуска тестов
-```bash
+# Открыть отчёт по результатам Maven
 mvn allure:serve
 ```
-Команда открывает отчёт в браузере и работает, пока вы не нажмёте `Ctrl+C`.
+
+Maven сохраняет тестовые результаты в `target/surefire-reports/`, результаты Allure — в `target/allure-results/`. Не смешивайте их с результатами Gradle.
 
 ## Правила обучения
 - Давай по одному небольшому заданию и жди моей попытки.
 - Перед выполнением команды объясняй её назначение.
 - Проверяй мои промпты: отмечай неоднозначности и предлагай улучшения.
+- Исправляй мои формулировки и предлагай профессиональный вариант, сохраняя исходный смысл и кратко объясняя существенные неточности.
 - После моих изменений читай актуальный код и проверяй diff.
 - Учебный код я изменяю самостоятельно. Полное решение показывай по моей просьбе или после попыток, когда нужен подробный разбор.
 
